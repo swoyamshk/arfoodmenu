@@ -1,0 +1,6 @@
+@ARMenu_HostAddress = http://localhost:5171
+
+GET {{ARMenu_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
