@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ARMenu.Controllers
@@ -19,42 +20,52 @@ namespace ARMenu.Controllers
             _menuCategoryCollection = database.GetCollection<MenuCategory>("MenuCategories");
         }
 
-        // Create a new MenuCategory
+        // 🔹 POST: Create a new MenuCategory
         [HttpPost]
-        public async Task<ActionResult<MenuCategory>> CreateMenuCategory(MenuCategory menuCategory)
+        public async Task<ActionResult<MenuCategory>> CreateMenuCategory([FromBody] MenuCategory menuCategory)
         {
+            if (menuCategory == null || string.IsNullOrWhiteSpace(menuCategory.Name))
+            {
+                return BadRequest("Menu category name is required.");
+            }
+
+            // ✅ Remove manual ID assignment, let MongoDB handle it
             await _menuCategoryCollection.InsertOneAsync(menuCategory);
-            return CreatedAtAction(nameof(GetMenuCategoryById), new { id = menuCategory.Id.ToString() }, menuCategory);
+
+            return CreatedAtAction(nameof(GetMenuCategoryById), new { id = menuCategory.Id }, menuCategory);
         }
 
-        // Get all MenuCategories
+
+        // 🔹 GET: Get all MenuCategories
         [HttpGet]
-        public async Task<ActionResult<List<MenuCategory>>> GetMenuCategories()
+        public async Task<ActionResult<List<object>>> GetMenuCategories()
         {
-            var menuCategories = await _menuCategoryCollection.Find(_ => true).ToListAsync();
-            return Ok(menuCategories);
+            var categories = await _menuCategoryCollection.Find(_ => true).ToListAsync();
+
+            var formattedCategories = categories.Select(c => new
+            {
+                _id = c.Id,  // ✅ Ensure `_id` is included
+                name = c.Name,
+                description = c.Description
+            }).ToList();
+
+            return Ok(formattedCategories);
         }
 
-        // Get MenuCategory by Id
+        // 🔹 GET: Get MenuCategory by Id
         [HttpGet("{id}")]
         public async Task<ActionResult<MenuCategory>> GetMenuCategoryById(string id)
         {
-            var menuCategory = await _menuCategoryCollection.Find(c => c.Id == new ObjectId(id)).FirstOrDefaultAsync();
+            // ✅ Validate `id` before querying
+            if (!ObjectId.TryParse(id, out _))
+            {
+                return BadRequest("Invalid category ID.");
+            }
+
+            var menuCategory = await _menuCategoryCollection.Find(c => c.Id == id).FirstOrDefaultAsync();
             if (menuCategory == null) return NotFound();
+
             return Ok(menuCategory);
-        }
-
-        // Add Dishes to a MenuCategory
-        [HttpPut("{id}/addDishes")]
-        public async Task<ActionResult> AddDishesToCategory(string id, List<ObjectId> dishIds)
-        {
-            var menuCategory = await _menuCategoryCollection.Find(c => c.Id == new ObjectId(id)).FirstOrDefaultAsync();
-            if (menuCategory == null) return NotFound();
-
-            var updateDefinition = Builders<MenuCategory>.Update.PushEach(c => c.Dishes, dishIds);
-            await _menuCategoryCollection.UpdateOneAsync(c => c.Id == new ObjectId(id), updateDefinition);
-
-            return NoContent();
         }
     }
 }

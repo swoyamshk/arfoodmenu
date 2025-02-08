@@ -15,7 +15,7 @@ export const createMenuCategory = async (categoryData) => {
 };
 
 // Get all categories
-export const getAllMenuCategories = async () => {
+export const getMenuCategories = async () => {
   try {
     const response = await axios.get(`${API_URL}`);
     return response.data;

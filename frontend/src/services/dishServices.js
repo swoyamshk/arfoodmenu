@@ -4,16 +4,17 @@ import axios from "axios";
 const API_URL = "https://localhost:8080/api/dish"; // Adjust to your backend port
 
 // Create a new dish
-export const createDish = async (dishData) => {
+export const createDish = async (formData) => {
   try {
-    const response = await axios.post(`${API_URL}`, dishData);
+    const response = await axios.post(API_URL, formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
     return response.data;
   } catch (error) {
-    console.error("Error creating dish:", error);
+    console.error("Error creating dish:", error.response?.data || error.message);
     throw error;
   }
 };
-
 // Get all dishes
 export const getAllDishes = async () => {
   try {

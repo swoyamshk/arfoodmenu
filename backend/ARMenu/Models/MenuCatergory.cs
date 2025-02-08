@@ -1,19 +1,12 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
-using System.Collections.Generic;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
-namespace ARMenu.Models
+public class MenuCategory
 {
-    public class MenuCategory
-    {
-        [BsonId]
-        public ObjectId Id { get; set; }
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; } = ObjectId.GenerateNewId().ToString(); // ✅ Auto-generate ID
 
-        public string Name { get; set; }
-
-        public string Description { get; set; }
-
-        // This will be populated with ObjectIds of Dish objects
-        public List<ObjectId> Dishes { get; set; } = new List<ObjectId>();
-    }
+    public string Name { get; set; }
+    public string Description { get; set; }
 }

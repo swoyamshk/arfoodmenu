@@ -74,19 +74,73 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/Dish"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Dish"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Dish"
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "menuCategoryId": {
+                    "type": "string"
+                  },
+                  "isVegetarian": {
+                    "type": "boolean"
+                  },
+                  "isSpicy": {
+                    "type": "boolean"
+                  },
+                  "ingredients": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "imageFile": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "arModelFile": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "name": {
+                  "style": "form"
+                },
+                "description": {
+                  "style": "form"
+                },
+                "price": {
+                  "style": "form"
+                },
+                "menuCategoryId": {
+                  "style": "form"
+                },
+                "isVegetarian": {
+                  "style": "form"
+                },
+                "isSpicy": {
+                  "style": "form"
+                },
+                "ingredients": {
+                  "style": "form"
+                },
+                "imageFile": {
+                  "style": "form"
+                },
+                "arModelFile": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -108,6 +162,42 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Dish"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Dish"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Dish"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Dish"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Dish"
+                  }
                 }
               }
             }
@@ -212,25 +302,19 @@
               "text/plain": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MenuCategory"
-                  }
+                  "items": { }
                 }
               },
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MenuCategory"
-                  }
+                  "items": { }
                 }
               },
               "text/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MenuCategory"
-                  }
+                  "items": { }
                 }
               }
             }
@@ -273,56 +357,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/api/MenuCategory/{id}/addDishes": {
-      "put": {
-        "tags": [
-          "MenuCategory"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ObjectId"
-                }
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ObjectId"
-                }
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ObjectId"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       }
@@ -373,7 +407,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/ObjectId"
+            "type": "string",
+            "nullable": true
           },
           "name": {
             "type": "string",
@@ -387,12 +422,14 @@
             "type": "number",
             "format": "double"
           },
-          "imageUrl": {
+          "imageFile": {
             "type": "string",
+            "format": "byte",
             "nullable": true
           },
-          "arModelUrl": {
+          "arModelFile": {
             "type": "string",
+            "format": "byte",
             "nullable": true
           },
           "ingredients": {
@@ -433,7 +470,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/ObjectId"
+            "type": "string",
+            "nullable": true
           },
           "name": {
             "type": "string",
@@ -442,29 +480,6 @@
           "description": {
             "type": "string",
             "nullable": true
-          },
-          "dishes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ObjectId"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "ObjectId": {
-        "type": "object",
-        "properties": {
-          "timestamp": {
-            "type": "integer",
-            "format": "int32",
-            "readOnly": true
-          },
-          "creationTime": {
-            "type": "string",
-            "format": "date-time",
-            "readOnly": true
           }
         },
         "additionalProperties": false
