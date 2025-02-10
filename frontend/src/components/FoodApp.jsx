@@ -3,12 +3,15 @@
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/buttons";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getAllDishes } from "../services/dishServices";
+import DishCard from "../components/DishCard";
 
-// Simple icon components to replace Lucide icons
+// Simple icon components
 const PizzaIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
     <circle cx="12" cy="12" r="10" />
-    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10" />
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10" />
   </svg>
 );
 
@@ -24,12 +27,6 @@ const CoffeeIcon = () => (
   </svg>
 );
 
-const PlusIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
-    <path d="M12 5v14M5 12h14" />
-  </svg>
-);
-
 const SlidersIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
     <path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6" />
@@ -37,7 +34,24 @@ const SlidersIcon = () => (
 );
 
 export default function FoodApp() {
-  const navigate = useNavigate(); // Hook to navigate
+  const navigate = useNavigate();
+  const [dishes, setDishes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchDishes = async () => {
+      try {
+        const data = await getAllDishes();
+        setDishes(data);
+      } catch (err) {
+        setError("Failed to load dishes.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDishes();
+  }, []);
 
   const handlePizzaClick = () => {
     navigate("/ar-view");
@@ -50,48 +64,26 @@ export default function FoodApp() {
     { icon: <PizzaIcon />, name: "Sushi", color: "bg-purple-100 text-purple-500" },
   ];
 
-  const pizzas = [
-    {
-      name: "Meat Pizza",
-      type: "Mixed Pizza",
-      price: 8.3,
-      image: "https://images.unsplash.com/photo-1576458088443-04a19bb13da6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHBpenphfGVufDB8fDB8fHww",
-    },
-    {
-      name: "Cheese Pizza",
-      type: "Mixed Pizza",
-      price: 7.3,
-      image: "https://images.unsplash.com/photo-1576458088443-04a19bb13da6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHBpenphfGVufDB8fDB8fHww",
-    },
-    {
-      name: "Meat Pizza",
-      type: "Mixed Pizza",
-      price: 8.3,
-      image: "https://images.unsplash.com/photo-1576458088443-04a19bb13da6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHBpenphfGVufDB8fDB8fHww",
-    },
-    {
-      name: "Cheese Pizza",
-      type: "Mixed Pizza",
-      price: 7.3,
-      image: "https://images.unsplash.com/photo-1576458088443-04a19bb13da6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHBpenphfGVufDB8fDB8fHww",
-    },
-  ];
+  if (loading) return <p className="text-center text-gray-500">Loading dishes...</p>;
+  if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-white min-h-screen">
-      <header className="flex justify-between items-center mb-6">
+    <div className="max-w-4xl mx-auto p-4 bg-white min-h-screen">
+      {/* Header Section */}
+      <header className="flex flex-wrap justify-between items-center mb-6 px-4 md:px-6">
         <div>
           <h1 className="text-2xl font-bold">Hello,</h1>
-          <p className="text-gray-500">What you want eat today?</p>
+          <p className="text-gray-500">What you want to eat today?</p>
         </div>
         <div className="w-10 h-10 rounded-full bg-yellow-400 overflow-hidden">
           <img src="/logo192.png" alt="Profile" className="w-full h-full object-cover" />
         </div>
       </header>
 
-      <div className="flex gap-2 mb-6">
+      {/* Search Bar */}
+      <div className="flex flex-wrap gap-2 items-center mb-6 px-4 md:px-6">
         <div className="relative flex-1">
-          <Input placeholder="Search for Food" className="pl-8 pr-4 py-3 rounded-xl bg-gray-100 border-none" />
+          <Input placeholder="Search for Food" className="pl-8 pr-4 py-3 rounded-xl bg-gray-100 border-none w-full" />
           <span className="absolute left-3 top-1/2 -translate-y-1/2">
             <svg
               className="w-4 h-4 text-gray-400"
@@ -109,7 +101,8 @@ export default function FoodApp() {
         </Button>
       </div>
 
-      <div className="flex gap-4 mb-6 overflow-x-auto pb-2">
+      {/* Categories Section */}
+      <div className="flex gap-4 mb-6 overflow-x-auto pb-2 px-4 md:px-6">
         {categories.map((category, index) => (
           <button
             key={index}
@@ -121,29 +114,10 @@ export default function FoodApp() {
         ))}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        {pizzas.map((pizza, index) => (
-          <div key={index} className={`p-3 rounded-2xl ${index === 1 ? "border-2 border-blue-500" : ""}`}>
-            <div className="relative mb-3">
-              <img
-                src={pizza.image || "/placeholder.svg"}
-                alt={pizza.name}
-                className="w-full h-auto rounded-full"
-              />
-            </div>
-            <h3 className="font-semibold">{pizza.name}</h3>
-            <p className="text-sm text-gray-500 mb-2">{pizza.type}</p>
-            <div className="flex justify-between items-center">
-              <span className="font-bold">$ {pizza.price.toFixed(2)}</span>
-              <Button
-                size="icon"
-                className="rounded-full bg-orange-500 hover:bg-orange-600 h-8 w-8"
-                onClick={handlePizzaClick}
-              >
-                <PlusIcon />
-              </Button>
-            </div>
-          </div>
+      {/* Dishes Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 px-4 md:px-6">
+        {dishes.map((dish) => (
+          <DishCard key={dish.id} dish={dish} onClick={handlePizzaClick} />
         ))}
       </div>
     </div>

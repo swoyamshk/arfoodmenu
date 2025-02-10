@@ -23,28 +23,34 @@ namespace ARMenu.Services
             _secretKey = _configuration["JwtSettings:SecretKey"];
         }
 
-        public async Task<string> RegisterUser(string username, string email, string password)
+        public async Task<(string Token, string Role)> RegisterUser(string username, string email, string password, string role)
         {
             var existingUser = await _mongoDbService.GetUserByEmailAsync(email);
             if (existingUser != null)
-                return "User already exists";
+                return (null, null);
 
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
-            var user = new User { Username = username, Email = email, PasswordHash = hashedPassword };
+
+            // Ensure role is either "admin" or "customer"
+            var userRole = string.IsNullOrEmpty(role) ? "customer" : role;
+
+            var user = new User { Username = username, Email = email, PasswordHash = hashedPassword, Role = userRole };
             await _mongoDbService.AddUserAsync(user);
 
-            return GenerateJwtToken(user);
+            var token = GenerateJwtToken(user);
+            return (token, user.Role);
         }
 
-        public async Task<string> LoginUser(string email, string password)
+
+        public async Task<(string Token, string Role)> LoginUser(string email, string password)
         {
             var user = await _mongoDbService.GetUserByEmailAsync(email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-                return null;
+                return (null, null);
 
-            return GenerateJwtToken(user);
+            var token = GenerateJwtToken(user);
+            return (token, user.Role);
         }
-
         public string GenerateJwtToken(User user)
         {
 
@@ -65,6 +71,7 @@ namespace ARMenu.Services
             {
         new Claim(ClaimTypes.Name, user.Username),
         new Claim(ClaimTypes.Email, user.Email),
+        new Claim(ClaimTypes.Role, user.Role)
         // Add other claims if necessary
     };
 

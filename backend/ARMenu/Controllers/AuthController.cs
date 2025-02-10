@@ -19,22 +19,26 @@ namespace ARMenu.Controllers
         {
             try
             {
-                var token = await _authService.RegisterUser(request.Username, request.Email, request.Password);
-                return Ok(new { Token = token });
+                var (token, role) = await _authService.RegisterUser(request.Username, request.Email, request.Password, request.Role);
+                if (token == null)
+                    return BadRequest(new { message = "User already exists" });
+
+                return Ok(new { Token = token, Role = role });
             }
             catch (Exception ex)
             {
-                // You can customize this to return specific error messages based on the exception type
                 return BadRequest(new { message = ex.Message });
             }
         }
 
-
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var token = await _authService.LoginUser(request.Email, request.Password);
-            return token == null ? Unauthorized("Invalid credentials") : Ok(new { Token = token });
+            var (token, role) = await _authService.LoginUser(request.Email, request.Password);
+            if (token == null)
+                return Unauthorized(new { message = "Invalid credentials" });
+
+            return Ok(new { Token = token, Role = role });
         }
     }
 
@@ -43,6 +47,7 @@ namespace ARMenu.Controllers
         public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public string Role { get; set; } // Add this field
     }
 
     public class LoginRequest
