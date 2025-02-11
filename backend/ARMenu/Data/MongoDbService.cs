@@ -18,6 +18,29 @@ namespace ARMenu.Data
         public async Task<User> GetUserByEmailAsync(string email) =>
             await _users.Find(u => u.Email == email).FirstOrDefaultAsync();
 
+        public async Task<User> GetUserByIdAsync(string id)
+        {
+            var filter = Builders<User>.Filter.Eq(u => u.Id, id);
+            return await _users.Find(filter).FirstOrDefaultAsync();
+        }
+        public async Task<User> UpdateUserProfileAsync(string id, string username, string email)
+        {
+            var filter = Builders<User>.Filter.Eq(u => u.Id, id);
+            var update = Builders<User>.Update
+                .Set(u => u.Username, username)
+                .Set(u => u.Email, email);
+
+            var options = new FindOneAndUpdateOptions<User>
+            {
+                ReturnDocument = ReturnDocument.After
+            };
+
+            return await _users.FindOneAndUpdateAsync(filter, update, options);
+        }
+
+
+
+
         public async Task AddUserAsync(User user) =>
             await _users.InsertOneAsync(user);
     }

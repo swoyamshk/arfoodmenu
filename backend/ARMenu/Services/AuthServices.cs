@@ -42,15 +42,19 @@ namespace ARMenu.Services
         }
 
 
-        public async Task<(string Token, string Role)> LoginUser(string email, string password)
+        public async Task<(string Token, string Role, string userId)> LoginUser(string email, string password)
         {
             var user = await _mongoDbService.GetUserByEmailAsync(email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-                return (null, null);
+                return (null, null, null);
 
             var token = GenerateJwtToken(user);
-            return (token, user.Role);
+            //var userId = await _mongoDbService.GetUserByIdAsync(userId);
+            return (token, user.Role, user.Id);
+           
         }
+
+
         public string GenerateJwtToken(User user)
         {
 

@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../services/authServices";
+import { loginUser, getUserProfile } from "../services/authServices";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import jwt_decode from "jwt-decode";  // Import jwt-decode
 
 const Login = ({ setToken }) => {
   const [email, setEmail] = useState("");
@@ -16,9 +15,13 @@ const Login = ({ setToken }) => {
       const { data } = await loginUser({ email, password });
   
       if (data?.token && data?.role) {
+        // Store token and role in localStorage
         localStorage.setItem("token", data.token);
         localStorage.setItem("role", data.role);
+        localStorage.setItem("userId", data.userId);
+  
         setToken(data.token);
+  
   
         // Navigate based on the role
         navigate(data.role === "admin" ? "/create-dish" : "/profile");

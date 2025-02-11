@@ -1,14 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import FoodApp from './components/FoodApp';  // Your pizza selection page
-import ModelViewerPage from './components/ModelViewerPage'; // Your 3D model page
 import Register from "./components/Register";
 import CreateMenuCategory from "./components/CreateMenuCategory";
 import { useState } from "react";
 import Login from './components/Login';
-import CameraAccess from "./components/CameraAccess";
 import WebXRARViewer from "./components/CameraAccess";
 import CreateDishForm from "./components/CreateDish";
-import DishList from "./components/DishList";
 import BottomNavBar from "./components/BottomNavbar";
 import ProfilePage from "./components/ProfilePage";
 import FavoritesPage from "./components/FavouritesPage";
@@ -16,6 +13,7 @@ import NotificationsPage from "./components/NotificationPage";
 import DishDetails from './components/DishDetails';
 import CartPage from "./components/CartPage";
 import { CartProvider } from "./context/CartProvider";
+import UpdateProfile from "./components/UpdateProfile";
 
 function App() {
 
@@ -36,6 +34,7 @@ function App() {
         <Route path="/favorites" element={<FavoritesPage/>} />
         <Route path="/dish/:id" element={<DishDetails/>} />
         <Route path="/cart" element={<CartPage/>} />
+        <Route path="/update-profile" element={<UpdateProfile/>} />
       </Routes>
       <BottomNavBar/>
       </Router> 

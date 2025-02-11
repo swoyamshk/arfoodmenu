@@ -1,4 +1,4 @@
-export default function MenuItem({ item }) {
+export default function MenuItem({ itm }) {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="p-4">
