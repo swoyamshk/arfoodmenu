@@ -191,6 +191,54 @@
     ]
   },
   {
+    "ContainingType": "ARMenu.Controllers.DishController",
+    "Method": "DeleteDish",
+    "RelativePath": "api/Dish/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ARMenu.Controllers.DishController",
+    "Method": "GetARModel",
+    "RelativePath": "api/Dish/armodel/{fileId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fileId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ARMenu.Controllers.DishController",
+    "Method": "GetImage",
+    "RelativePath": "api/Dish/image/{fileId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fileId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ARMenu.Controllers.MenuCategoryController",
     "Method": "CreateMenuCategory",
     "RelativePath": "api/MenuCategory",

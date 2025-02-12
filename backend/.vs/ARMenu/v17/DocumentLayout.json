@@ -3,16 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\Swoyam Shakya\\Desktop\\arfoodmenu\\backend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|c:\\users\\swoyam shakya\\desktop\\arfoodmenu\\backend\\armenu\\controllers\\dishcontrolller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|solutionrelative:armenu\\controllers\\dishcontrolller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|c:\\users\\swoyam shakya\\desktop\\arfoodmenu\\backend\\armenu\\models\\userupdatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|solutionrelative:armenu\\models\\userupdatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|c:\\users\\swoyam shakya\\desktop\\arfoodmenu\\backend\\armenu\\models\\dish.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|solutionrelative:armenu\\models\\dish.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|c:\\users\\swoyam shakya\\desktop\\arfoodmenu\\backend\\armenu\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|solutionrelative:armenu\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|c:\\users\\swoyam shakya\\desktop\\arfoodmenu\\backend\\armenu\\data\\mongodbservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|solutionrelative:armenu\\data\\mongodbservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|c:\\users\\swoyam shakya\\desktop\\arfoodmenu\\backend\\armenu\\models\\userupdatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|solutionrelative:armenu\\models\\userupdatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|c:\\users\\swoyam shakya\\desktop\\arfoodmenu\\backend\\armenu\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -25,10 +33,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|c:\\users\\swoyam shakya\\desktop\\arfoodmenu\\backend\\armenu\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|solutionrelative:armenu\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|c:\\users\\swoyam shakya\\desktop\\arfoodmenu\\backend\\armenu\\models\\dish.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BFCE743E-9EE4-46A9-942A-7BF24071A1D0}|ARMenu\\ARMenu.csproj|solutionrelative:armenu\\models\\dish.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,7 +50,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
+              "Title": "DishControlller.cs",
+              "DocumentMoniker": "C:\\Users\\Swoyam Shakya\\Desktop\\arfoodmenu\\backend\\ARMenu\\Controllers\\DishControlller.cs",
+              "RelativeDocumentMoniker": "ARMenu\\Controllers\\DishControlller.cs",
+              "ToolTip": "C:\\Users\\Swoyam Shakya\\Desktop\\arfoodmenu\\backend\\ARMenu\\Controllers\\DishControlller.cs",
+              "RelativeToolTip": "ARMenu\\Controllers\\DishControlller.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAKYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-12T11:29:53.456Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "UserUpdateDto.cs",
               "DocumentMoniker": "C:\\Users\\Swoyam Shakya\\Desktop\\arfoodmenu\\backend\\ARMenu\\Models\\UserUpdateDto.cs",
               "RelativeDocumentMoniker": "ARMenu\\Models\\UserUpdateDto.cs",
@@ -54,24 +71,25 @@
               "RelativeToolTip": "ARMenu\\Models\\UserUpdateDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-11T12:40:04.89Z"
+              "WhenOpened": "2025-02-11T12:40:04.89Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\Swoyam Shakya\\Desktop\\arfoodmenu\\backend\\ARMenu\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "ARMenu\\Controllers\\AuthController.cs",
               "ToolTip": "C:\\Users\\Swoyam Shakya\\Desktop\\arfoodmenu\\backend\\ARMenu\\Controllers\\AuthController.cs",
               "RelativeToolTip": "ARMenu\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAADwAAAAAAAAAAAAuwEsAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAADwAAAAAAAAAAAAuwEkAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-04T10:23:51.469Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Swoyam Shakya\\Desktop\\arfoodmenu\\backend\\ARMenu\\Program.cs",
               "RelativeDocumentMoniker": "ARMenu\\Program.cs",
@@ -83,7 +101,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "MongoDbService.cs",
               "DocumentMoniker": "C:\\Users\\Swoyam Shakya\\Desktop\\arfoodmenu\\backend\\ARMenu\\Data\\MongoDbService.cs",
               "RelativeDocumentMoniker": "ARMenu\\Data\\MongoDbService.cs",
@@ -95,7 +113,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "User.cs",
               "DocumentMoniker": "C:\\Users\\Swoyam Shakya\\Desktop\\arfoodmenu\\backend\\ARMenu\\Models\\User.cs",
               "RelativeDocumentMoniker": "ARMenu\\Models\\User.cs",
@@ -107,19 +125,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 2,
               "Title": "Dish.cs",
               "DocumentMoniker": "C:\\Users\\Swoyam Shakya\\Desktop\\arfoodmenu\\backend\\ARMenu\\Models\\Dish.cs",
               "RelativeDocumentMoniker": "ARMenu\\Models\\Dish.cs",
               "ToolTip": "C:\\Users\\Swoyam Shakya\\Desktop\\arfoodmenu\\backend\\ARMenu\\Models\\Dish.cs",
               "RelativeToolTip": "ARMenu\\Models\\Dish.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAmwBsAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAADwvw8AAABEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-05T16:05:47.144Z"
+              "WhenOpened": "2025-02-05T16:05:47.144Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Swoyam Shakya\\Desktop\\arfoodmenu\\backend\\ARMenu\\appsettings.json",
               "RelativeDocumentMoniker": "ARMenu\\appsettings.json",

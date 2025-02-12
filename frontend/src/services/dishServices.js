@@ -15,6 +15,7 @@ export const createDish = async (formData) => {
     throw error;
   }
 };
+
 // Get all dishes
 export const getAllDishes = async () => {
   try {
@@ -35,6 +36,12 @@ export const getDishById = async (id) => {
     console.error("Error fetching dish by ID:", error);
     throw error;
   }
+};
+
+// Get image URL for a dish
+export const getImageUrl = (imageFileId) => {
+  if (!imageFileId) return "/placeholder.jpg"; // Fallback image if no image ID is provided
+  return `https://localhost:8080/api/dish/image/${imageFileId}`;
 };
 
 // Update a dish by ID

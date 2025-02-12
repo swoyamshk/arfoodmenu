@@ -13,9 +13,8 @@ public class Dish
 
     public decimal Price { get; set; }
 
-    public byte[] ImageFile { get; set; }
-
-    public byte[] ArModelFile { get; set; }
+    public string ImageFileId { get; set; }    // For the dish image
+    public string ArModelFileId { get; set; }  
 
     public List<string> Ingredients { get; set; }
 

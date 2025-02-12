@@ -322,6 +322,70 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "Dish"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Dish/image/{fileId}": {
+      "get": {
+        "tags": [
+          "Dish"
+        ],
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Dish/armodel/{fileId}": {
+      "get": {
+        "tags": [
+          "Dish"
+        ],
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/api/MenuCategory": {
@@ -502,14 +566,12 @@
             "type": "number",
             "format": "double"
           },
-          "imageFile": {
+          "imageFileId": {
             "type": "string",
-            "format": "byte",
             "nullable": true
           },
-          "arModelFile": {
+          "arModelFileId": {
             "type": "string",
-            "format": "byte",
             "nullable": true
           },
           "ingredients": {

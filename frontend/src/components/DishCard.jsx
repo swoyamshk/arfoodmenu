@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/buttons";
 import { useCart } from "../context/CartProvider"; // Import useCart hook
 import { toast } from "react-toastify"; // Import toast for notifications
+import { getImageUrl } from "../services/dishServices"; // Import function to get image URL
 
 const PlusIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
@@ -21,18 +22,18 @@ const DishCard = ({ dish }) => {
   // Handle click on the "+" button to add dish to cart
   const handleAddToCart = (e) => {
     e.stopPropagation(); // Prevent the card's onClick from firing
-    console.log("Adding to cart:", dish); // Debugging line
     addToCart(dish); // Add dish to cart
     toast.success(`${dish.name} added to cart!`); // Show success notification
   };
 
   return (
-    <div className="p-3 rounded-2xl cursor-pointer" onClick={handleClick}>
+    <div className="p-3 rounded-2xl cursor-pointer shadow-md" onClick={handleClick}>
       <div className="relative mb-3">
         <img
-          src={dish.imageFile ? `data:image/png;base64,${dish.imageFile}` : "/placeholder.svg"}
+          src={getImageUrl(dish.imageFileId)} // Fetch image using correct API URL
           alt={dish.name}
           className="w-full h-40 object-cover rounded-lg"
+          onError={(e) => { e.target.src = "/placeholder.svg"; }} // Fallback to placeholder on error
         />
       </div>
       <h3 className="font-semibold">{dish.name}</h3>

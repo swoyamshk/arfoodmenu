@@ -27,8 +27,8 @@ function App() {
         <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="/register" element={<Register setToken={setToken}/>} />
         <Route path="/ar-view" element={<WebXRARViewer />} />
-        <Route path="/create-menu-category" element={CreateMenuCategory} />
-        <Route path="/create-dish" element={CreateDishForm} />
+        <Route path="/create-menu-category" element={<CreateMenuCategory/>} />
+        <Route path="/create-dish" element={<CreateDishForm/>} />
         <Route path="/profile" element={<ProfilePage/>} />
         <Route path="/notifications" element={<NotificationsPage/>} />
         <Route path="/favorites" element={<FavoritesPage/>} />
