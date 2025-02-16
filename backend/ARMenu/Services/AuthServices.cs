@@ -5,7 +5,6 @@ using ARMenu.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using BCrypt.Net;
-using ARMenu.Data;
 
 namespace ARMenu.Services
 {

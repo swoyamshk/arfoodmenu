@@ -1,5 +1,4 @@
-﻿using ARMenu.Data;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using ARMenu.Services;
 using Microsoft.AspNetCore.Mvc;
 using ARMenu.Models;

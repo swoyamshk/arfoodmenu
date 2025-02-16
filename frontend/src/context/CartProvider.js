@@ -3,26 +3,25 @@ import { createContext, useState, useEffect, useContext } from "react";
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  // Retrieve and parse the cart from localStorage (fallback to empty array)
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem("cart");
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
-  // Sync cart changes to localStorage
   useEffect(() => {
     try {
-      // Avoid large data being stored in localStorage
       const cartToStore = cart.map(({ id, name, price, quantity }) => ({
-        id, name, price, quantity
+        id,
+        name,
+        price,
+        quantity,
       }));
-      localStorage.setItem("cart", JSON.stringify(cartToStore)); // Save reduced data to localStorage
+      localStorage.setItem("cart", JSON.stringify(cartToStore));
     } catch (error) {
       console.error("Error saving cart to localStorage:", error);
     }
   }, [cart]);
 
-  // Add to cart function
   const addToCart = (dish) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.id === dish.id);
@@ -35,12 +34,11 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  // Remove a single item from cart
   const removeFromCart = (id) => {
     setCart((prevCart) => {
       const updatedCart = prevCart.filter((item) => item.id !== id);
       try {
-        localStorage.setItem("cart", JSON.stringify(updatedCart)); // Sync with localStorage
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
       } catch (error) {
         console.error("Error saving cart to localStorage:", error);
       }
@@ -48,14 +46,57 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  // Clear entire cart
   const clearCart = () => {
     setCart([]);
-    localStorage.removeItem("cart"); // Remove from localStorage
+    localStorage.removeItem("cart");
   };
 
+  // Create an order and save it to the DB
+  const createOrder = async (userId) => {
+    if (!userId) {
+      console.error("User ID is missing.");
+      return;
+    }
+  
+    const orderData = {
+      userId,
+      orderDate: new Date().toISOString(),
+      totalAmount: cart.reduce((total, item) => total + item.price * item.quantity, 0),
+      orderItems: cart.map((item) => ({
+        dishId: item.id,
+        dishName: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        // Do NOT include 'Id' or 'OrderId' here, let the backend handle it
+      })),
+    };
+  
+    try {
+      const response = await fetch("https://localhost:8080/api/Orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error response:", errorData);
+        throw new Error(`Failed to place order: ${response.statusText}`);
+      }
+  
+      // console.log("Order placed successfully!");
+      clearCart();
+    } catch (error) {
+      console.error("Error placing order:", error.message);
+    }
+  };
+  
+  
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, createOrder }}>
       {children}
     </CartContext.Provider>
   );

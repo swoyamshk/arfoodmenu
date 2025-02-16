@@ -1,9 +1,21 @@
 import { useCart } from "../context/CartProvider";
 
 const CartPage = () => {
-  const { cart, removeFromCart, clearCart } = useCart();
+  const { cart, removeFromCart, clearCart, createOrder } = useCart();
 
-  console.log("Cart items in CartPage:", cart); // Debugging
+  // Get userId from localStorage
+  const userId = localStorage.getItem("userId");
+
+  // console.log("Cart items in CartPage:", cart); // Debugging
+  // console.log("User ID from localStorage:", userId); // Debugging
+
+  const handlePlaceOrder = () => {
+    if (!userId) {
+      alert("Please log in to place an order.");
+      return;
+    }
+    createOrder(userId); // Send the order with the stored user ID
+  };
 
   return (
     <div className="p-5">
@@ -28,12 +40,22 @@ const CartPage = () => {
             </div>
           ))}
 
-          <button
-            onClick={clearCart}
-            className="mt-4 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800"
-          >
-            Clear Cart
-          </button>
+          <div className="mt-4 flex gap-4">
+            <button
+              onClick={clearCart}
+              className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800"
+            >
+              Clear Cart
+            </button>
+
+            <button
+              onClick={handlePlaceOrder}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              disabled={cart.length === 0}
+            >
+              Place Order
+            </button>
+          </div>
         </>
       )}
     </div>
