@@ -1,17 +1,42 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using System.Threading.Tasks;
 
 public class NotificationHub : Hub
 {
-    public async Task SendOrderNotification(string userId, string message)
+    private readonly ILogger<NotificationHub> _logger;
+
+    public NotificationHub(ILogger<NotificationHub> logger)
     {
-        if (!string.IsNullOrEmpty(userId))
+        _logger = logger;
+    }
+
+    public override async Task OnConnectedAsync()
+    {
+        string connectionId = Context.ConnectionId;
+        string userId = Context.UserIdentifier ?? "Guest";
+
+        Console.WriteLine($"SignalR Connected - ConnectionId: {connectionId}, UserId: {userId}");
+        _logger.LogInformation($"SignalR Connected - ConnectionId: {connectionId}, UserId: {userId}");
+
+        await base.OnConnectedAsync();
+    }
+
+
+    public override async Task OnDisconnectedAsync(Exception exception)
+    {
+        string connectionId = Context.ConnectionId;
+        string userId = Context.UserIdentifier ?? "Guest";
+
+        if (exception != null)
         {
-            await Clients.User(userId).SendAsync("ReceiveNotification", message);
+            Console.WriteLine($" SignalR Disconnected - ConnectionId: {connectionId}, UserId: {userId}, Reason: {exception.Message}");
+            _logger.LogWarning($" SignalR Disconnected - ConnectionId: {connectionId}, UserId: {userId}, Reason: {exception.Message}");
         }
         else
         {
-            await Clients.All.SendAsync("ReceiveNotification", message); // Send to all if guest
+            Console.WriteLine($"SignalR Disconnected - ConnectionId: {connectionId}, UserId: {userId}");
+            _logger.LogInformation($" SignalR Disconnected - ConnectionId: {connectionId}, UserId: {userId}");
         }
+
+        await base.OnDisconnectedAsync(exception);
     }
 }

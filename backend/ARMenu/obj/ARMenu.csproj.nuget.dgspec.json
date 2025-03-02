@@ -66,6 +66,10 @@
               "target": "Package",
               "version": "[3.1.0, )"
             },
+            "Stripe.net": {
+              "target": "Package",
+              "version": "[47.4.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.6.2, )"
@@ -73,6 +77,10 @@
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[8.3.1, )"
+            },
+            "plugin.web.eSewa.and.Khalti": {
+              "target": "Package",
+              "version": "[1.0.10, )"
             }
           },
           "imports": [

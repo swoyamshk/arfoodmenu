@@ -4,10 +4,10 @@ import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/buttons";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getAllDishes } from "../services/dishServices";
+import { getAllDishes, getAllRestaurants } from "../services/dishServices";
 import DishCard from "../components/DishCard";
 
-// Simple icon components
+// Simple icon components (unchanged)
 const PizzaIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
     <circle cx="12" cy="12" r="10" />
@@ -36,22 +36,30 @@ const SlidersIcon = () => (
 export default function FoodApp() {
   const navigate = useNavigate();
   const [dishes, setDishes] = useState([]);
+  const [restaurants, setRestaurants] = useState([]);
+  const [selectedRestaurant, setSelectedRestaurant] = useState(""); // New state for selected restaurant
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    const fetchDishes = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getAllDishes();
-        setDishes(data);
+        // Fetch all restaurants
+        const restaurantData = await getAllRestaurants();
+        setRestaurants(restaurantData);
+
+        // Fetch dishes, optionally filtered by restaurant
+        const dishData = await getAllDishes(selectedRestaurant || null);
+        setDishes(dishData);
       } catch (err) {
-        setError("Failed to load dishes.");
+        setError("Failed to load data.");
       } finally {
         setLoading(false);
       }
     };
-    fetchDishes();
-  }, []);
+    fetchData();
+  }, [selectedRestaurant]); // Re-fetch when selectedRestaurant changes
 
   const handlePizzaClick = () => {
     navigate("/ar-view");
@@ -64,7 +72,12 @@ export default function FoodApp() {
     { icon: <PizzaIcon />, name: "Sushi", color: "bg-purple-100 text-purple-500" },
   ];
 
-  if (loading) return <p className="text-center text-gray-500">Loading dishes...</p>;
+  // Filter dishes based on search query (and restaurant is handled by API)
+  const filteredDishes = dishes.filter((dish) =>
+    dish.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  if (loading) return <p className="text-center text-gray-500">Loading...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
@@ -80,10 +93,15 @@ export default function FoodApp() {
         </div>
       </header>
 
-      {/* Search Bar */}
+      {/* Search and Filter Section */}
       <div className="flex flex-wrap gap-2 items-center mb-6 px-4 md:px-6">
         <div className="relative flex-1">
-          <Input placeholder="Search for Food" className="pl-8 pr-4 py-3 rounded-xl bg-gray-100 border-none w-full" />
+          <Input
+            placeholder="Search for Food"
+            className="pl-8 pr-4 py-3 rounded-xl bg-gray-100 border-none w-full"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
           <span className="absolute left-3 top-1/2 -translate-y-1/2">
             <svg
               className="w-4 h-4 text-gray-400"
@@ -96,6 +114,18 @@ export default function FoodApp() {
             </svg>
           </span>
         </div>
+        <select
+          value={selectedRestaurant}
+          onChange={(e) => setSelectedRestaurant(e.target.value)}
+          className="px-4 py-3 rounded-xl bg-gray-100 border-none"
+        >
+          <option value="">All Restaurants</option>
+          {restaurants.map((restaurant) => (
+            <option key={restaurant.id} value={restaurant.id}>
+              {restaurant.name}
+            </option>
+          ))}
+        </select>
         <Button variant="default" className="px-4 rounded-xl bg-orange-500 hover:bg-orange-600">
           <SlidersIcon />
         </Button>
@@ -116,7 +146,7 @@ export default function FoodApp() {
 
       {/* Dishes Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 px-4 md:px-6">
-        {dishes.map((dish) => (
+        {filteredDishes.map((dish) => (
           <DishCard key={dish.id} dish={dish} onClick={handlePizzaClick} />
         ))}
       </div>

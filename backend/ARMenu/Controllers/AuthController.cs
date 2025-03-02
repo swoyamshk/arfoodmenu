@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using ARMenu.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text.Encodings.Web;
+using System.Text;
 
 namespace ARMenu.Controllers
 {
@@ -13,28 +16,83 @@ namespace ARMenu.Controllers
     {
         private readonly AuthService _authService;
         private readonly MongoDbService _mongoDbService;
-        public AuthController(AuthService authService, MongoDbService mongoDbService)
+        private readonly IEmailService _emailService;
+
+        public AuthController(AuthService authService, MongoDbService mongoDbService, EmailService emailService)
         {
             _authService = authService;
             _mongoDbService = mongoDbService;
+            _emailService = emailService;
         }
-
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (string.IsNullOrEmpty(request.Email))
+            {
+                return BadRequest(new { message = "Email is required." });
+            }
+
+            // Check if user already exists
+            var existingUser = await _mongoDbService.GetUserByEmailAsync(request.Email);
+            if (existingUser != null)
+            {
+                return BadRequest(new { message = "Email is already in use." });
+            }
+
+            // Create new user
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            var user = new User
+            {
+                Email = request.Email,
+                Username = request.Username ?? request.Email.Split('@')[0], // Default username from email
+                PasswordHash = hashedPassword,
+                Role = string.IsNullOrEmpty(request.Role) ? "customer" : request.Role,
+                IsEmailConfirmed = false // Ensure email confirmation is required
+            };
+
+            // Log the email before proceeding with registration
+            Console.WriteLine($"Registering user with email: {user.Email}");
+
+            // Save user to database
+            await _mongoDbService.AddUserAsync(user);
+
+            // Generate email confirmation token
+            var confirmationToken = Guid.NewGuid().ToString();
+            await _mongoDbService.SaveEmailConfirmationTokenAsync(user.Id, confirmationToken);
+
+            // Encode token for safe URL usage
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
+            var confirmationLink = $"{Request.Scheme}://{Request.Host}/api/auth/confirm-email?userId={user.Id}&token={encodedToken}";
+
+            // Ensure confirmation email is being sent with the correct email address
             try
             {
-                var (token, role) = await _authService.RegisterUser(request.Username, request.Email, request.Password, request.Role);
-                if (token == null)
-                    return BadRequest(new { message = "User already exists" });
+                // Log the confirmation link and email details
+                Console.WriteLine($"Confirmation link: {confirmationLink}");
+                Console.WriteLine($"Sending confirmation email to: {user.Email}");
 
-                return Ok(new { Token = token, Role = role });
+                if (string.IsNullOrEmpty(user.Email))
+                {
+                    return StatusCode(500, new { message = "User email is missing, cannot send confirmation email." });
+                }
+
+                // Send confirmation email
+                await _emailService.SendEmailAsync(user.Email, "Confirm Your Email",
+                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(confirmationLink)}'>clicking here</a>.");
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                // Log error and return failure response
+                return StatusCode(500, new { message = "User registered but email confirmation failed.", error = ex.Message });
             }
+
+            return Ok(new { message = "User registered successfully. Please check your email to confirm your account." });
         }
 
         [HttpPost("login")]
@@ -50,7 +108,6 @@ namespace ARMenu.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUserById(string id)
         {
-
             if (!ObjectId.TryParse(id, out _))
             {
                 return BadRequest("Invalid user ID.");
@@ -65,7 +122,6 @@ namespace ARMenu.Controllers
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateProfile(string id, [FromBody] UserUpdateDto request)
         {
-
             try
             {
                 // Validate ID
@@ -100,8 +156,31 @@ namespace ARMenu.Controllers
             }
         }
 
+        [HttpGet("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            try
+            {
+                var isValid = await _mongoDbService.VerifyEmailConfirmationTokenAsync(userId, token);
+                if (!isValid)
+                {
+                    return BadRequest("Invalid or expired confirmation link.");
+                }
 
+                // Activate user account by setting IsEmailConfirmed to true
+                var isActivated = await _mongoDbService.ActivateUserAccountAsync(userId);
+                if (!isActivated)
+                {
+                    return BadRequest("Account activation failed.");
+                }
 
+                return Ok(new { message = "Email confirmed successfully! You can now log in." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
 
     }
 

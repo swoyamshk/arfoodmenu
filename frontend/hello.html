@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+</head>
+<body>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("https://localhost:8080/notificationHub") // Adjust port as needed
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        connection.start().then(() => {
+            console.log("Connected to SignalR!");
+        }).catch(err => console.error("Connection failed: ", err));
+
+        connection.onclose(() => console.log("Disconnected"));
+    </script>
+</body>
+</html>

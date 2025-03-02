@@ -8,6 +8,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<EmailService>();
+
 // Add SignalR
 builder.Services.AddSignalR();
 
@@ -20,13 +22,16 @@ builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
     var settings = serviceProvider.GetRequiredService<IConfiguration>().GetSection("MongoDbSettings").Get<MongoDbSettings>();
     return new MongoClient(settings.ConnectionString);
 });
-builder.Services.AddScoped<IEmailService, EmailService>();
+//builder.Services.AddScoped<IEmailService, EmailService>();
 // Register MongoDbService (Singleton recommended for MongoClient)
 builder.Services.AddSingleton<MongoDbService>();
 
 // Register AuthService
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddSingleton<PaymentService>();
+builder.Services.AddHttpClient();
 
+builder.Services.Configure<EsewaConfig>(builder.Configuration.GetSection("eSewaConfig"));
 
 // Debugging: Print the connection string to verify it's loaded correctly
 Console.WriteLine($"MongoDB Connection String: {builder.Configuration["MongoDbSettings:ConnectionString"]}");
@@ -36,7 +41,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("https://localhost:3000") // Replace with your frontend URL
+        policy.WithOrigins("https://localhost:3000", "https://192.168.1.15:3000", "https://192.168.1.6:3000") 
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials(); // Allow credentials for SignalR
@@ -57,6 +62,7 @@ app.UseRouting(); // Ensure routing is enabled
 
 // Use CORS policy
 app.UseCors("AllowAll");
+app.UseCors("AllowFrontend");
 
 app.UseAuthorization();
 
@@ -66,4 +72,4 @@ app.MapHub<NotificationHub>("/notificationHub");
 // Map controllers
 app.MapControllers();
 
-app.Run();
+app.Run("https://0.0.0.0:8080");

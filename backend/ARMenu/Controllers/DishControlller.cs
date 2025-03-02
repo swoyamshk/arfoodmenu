@@ -16,12 +16,14 @@ namespace ARMenu.Controllers
     public class DishController : ControllerBase
     {
         private readonly IMongoCollection<Dish> _dishesCollection;
+        private readonly IMongoCollection<Restaurant> _restaurantsCollection; // New collection
         private readonly GridFSBucket _gridFS;
 
         public DishController(IMongoClient mongoClient)
         {
             var database = mongoClient.GetDatabase("ARFoodMenu");
             _dishesCollection = database.GetCollection<Dish>("Dishes");
+            _restaurantsCollection = database.GetCollection<Restaurant>("Restaurants"); // Initialize new collection
             _gridFS = new GridFSBucket(database);
         }
 
@@ -32,6 +34,7 @@ namespace ARMenu.Controllers
             [FromForm] string description,
             [FromForm] decimal price,
             [FromForm] string menuCategoryId,
+            [FromForm] string restaurantId,  // New parameter
             [FromForm] bool isVegetarian,
             [FromForm] bool isSpicy,
             [FromForm] List<string> ingredients,
@@ -40,9 +43,25 @@ namespace ARMenu.Controllers
         {
             try
             {
+                // Validate MenuCategoryId
                 if (string.IsNullOrEmpty(menuCategoryId) || !ObjectId.TryParse(menuCategoryId, out _))
                 {
                     return BadRequest("Invalid or missing MenuCategoryId.");
+                }
+
+                // Validate RestaurantId
+                if (string.IsNullOrEmpty(restaurantId) || !ObjectId.TryParse(restaurantId, out _))
+                {
+                    return BadRequest("Invalid or missing RestaurantId.");
+                }
+
+                // Check if restaurant exists
+                var restaurantExists = await _restaurantsCollection
+                    .Find(r => r.Id == restaurantId)
+                    .AnyAsync();
+                if (!restaurantExists)
+                {
+                    return BadRequest("Restaurant does not exist.");
                 }
 
                 if (imageFile == null || arModelFile == null)
@@ -66,6 +85,7 @@ namespace ARMenu.Controllers
                     Description = description,
                     Price = price,
                     MenuCategoryId = menuCategoryId,
+                    RestaurantId = restaurantId,  // Set the new field
                     IsVegetarian = isVegetarian,
                     IsSpicy = isSpicy,
                     Ingredients = ingredients ?? new List<string>(),
@@ -83,11 +103,15 @@ namespace ARMenu.Controllers
             }
         }
 
-        // 🔹 GET: Retrieve all dishes
+        // 🔹 GET: Retrieve all dishes (optionally filter by restaurant)
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Dish>>> GetAllDishes()
+        public async Task<ActionResult<IEnumerable<Dish>>> GetAllDishes([FromQuery] string restaurantId = null)
         {
-            var dishes = await _dishesCollection.Find(_ => true).ToListAsync();
+            var filter = restaurantId != null && ObjectId.TryParse(restaurantId, out _)
+                ? Builders<Dish>.Filter.Eq(d => d.RestaurantId, restaurantId)
+                : Builders<Dish>.Filter.Empty;
+
+            var dishes = await _dishesCollection.Find(filter).ToListAsync();
             return Ok(dishes);
         }
 
@@ -164,4 +188,3 @@ namespace ARMenu.Controllers
         }
     }
 }
-    

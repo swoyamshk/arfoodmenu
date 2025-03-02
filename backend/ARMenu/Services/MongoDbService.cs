@@ -69,6 +69,30 @@ namespace ARMenu.Services
             await _orders.DeleteOneAsync(filter);
         }
 
+        public async Task SaveEmailConfirmationTokenAsync(string userId, string token)
+        {
+            var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
+            var update = Builders<User>.Update.Set(u => u.ConfirmationToken, token);
+            await _users.UpdateOneAsync(filter, update);
+        }
+
+        public async Task<bool> VerifyEmailConfirmationTokenAsync(string userId, string token)
+        {
+            var user = await _users.Find(u => u.Id == userId && u.ConfirmationToken == token).FirstOrDefaultAsync();
+            return user != null;
+        }
+
+        public async Task<bool> ActivateUserAccountAsync(string userId)
+        {
+            var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
+            var update = Builders<User>.Update.Set(u => u.IsEmailConfirmed, true);
+
+            var result = await _users.UpdateOneAsync(filter, update);
+            return result.ModifiedCount > 0;
+        }
+
+
+
     }
 
     public class MongoDbSettings

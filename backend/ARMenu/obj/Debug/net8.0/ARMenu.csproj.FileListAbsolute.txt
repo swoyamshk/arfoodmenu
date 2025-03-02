@@ -158,3 +158,8 @@ C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\obj\Debug\net8.0\refint
 C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\obj\Debug\net8.0\ARMenu.pdb
 C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\obj\Debug\net8.0\ARMenu.genruntimeconfig.cache
 C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\obj\Debug\net8.0\ref\ARMenu.dll
+C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\bin\Debug\net8.0\Stripe.net.dll
+C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\bin\Debug\net8.0\System.Configuration.ConfigurationManager.dll
+C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\bin\Debug\net8.0\payment-gateway-nepal.dll

@@ -1,33 +1,34 @@
-﻿//using ARMenu.Data;
-//using ARMenu.Models;
-//using MongoDB.Driver;
-//using System.Collections.Generic;
-//using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
-//namespace ARMenu.Services
-//{
-//    public class OrderService
-//    {
-//        private readonly MongoDbService _mongoDbService;
+public class OrderService
+{
+    private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly ILogger<OrderService> _logger;
 
-//        public OrderService(MongoDbService mongoDbService)
-//        {
-//            _mongoDbService = mongoDbService;
-//        }
+    public OrderService(IHubContext<NotificationHub> hubContext, ILogger<OrderService> logger)
+    {
+        _hubContext = hubContext;
+        _logger = logger;
+    }
 
-//        public async Task CreateOrderAsync(Order order)
-//        {
-//            await _mongoDbService.Orders.InsertOneAsync(order);
-//        }
+    public async Task CreateOrder(string userId)
+    {
+        // Order creation logic
+        _logger.LogInformation($"Order placed for user: {userId}");
 
-//        public async Task<List<Order>> GetOrdersByUserIdAsync(string userId)
-//        {
-//            return await _mongoDbService.Orders.Find(o => o.UserId == userId).ToListAsync();
-//        }
+        string message = "Your order has been placed successfully!";
 
-//        public async Task<Order> GetOrderByIdAsync(int id)
-//        {
-//            return await _mongoDbService.Orders.Find(o => o.Id == id).FirstOrDefaultAsync();
-//        }
-//    }
-//}
+        if (!string.IsNullOrEmpty(userId))
+        {
+            _logger.LogInformation($"Sending notification to user: {userId}");
+            await _hubContext.Clients.User(userId).SendAsync("ReceiveNotification", message);
+        }
+        else
+        {
+            _logger.LogInformation("Sending notification to all users");
+            await _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
+        }
+    }
+}

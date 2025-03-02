@@ -14,7 +14,7 @@ public class Dish
     public decimal Price { get; set; }
 
     public string ImageFileId { get; set; }    // For the dish image
-    public string ArModelFileId { get; set; }  
+    public string ArModelFileId { get; set; }
 
     public List<string> Ingredients { get; set; }
 
@@ -24,4 +24,7 @@ public class Dish
 
     [BsonRepresentation(BsonType.ObjectId)]
     public string MenuCategoryId { get; set; }
+
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string RestaurantId { get; set; }  // New property to link to a restaurant
 }

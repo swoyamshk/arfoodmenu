@@ -10,33 +10,36 @@ const Register = ({ setToken }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const userData = { username, email, password, role: "customer" };
+  
+    console.log("Sending registration data:", userData);
+  
     try {
-      const { data } = await registerUser({ username, email, password });
+      const data = await registerUser(userData);
       console.log("Registration Response:", data);
-
-      if (data?.token && data.token !== "User already exists") {
+  
+      // ✅ Check properly if the backend explicitly says "User already exists"
+      if (typeof data === "object" && data.message) {
+        if (data.message.includes("User already exists")) {
+          toast.error("Registration successful");
+          return;
+        } else {
+          toast.success(data.message); // ✅ Show success message from backend
+        }
+      }
+  
+      // ✅ If a token exists, set it in localStorage and proceed
+      if (data.token) {
         localStorage.setItem("token", data.token);
         setToken(data.token);
         toast.success("Registration successful!");
-      } else {
-        toast.error("User with this email already exists.");
       }
     } catch (error) {
       console.error("Registration error:", error);
-
-      if (error.response) {
-        const errorMessage = error.response.data?.message || error.response.data;
-
-        if (error.response.status === 400) {
-          toast.error(errorMessage || "Registration failed.");
-        } else {
-          toast.error("Something went wrong. Please try again.");
-        }
-      } else {
-        toast.error("Network error. Please check your connection.");
-      }
+      toast.error("Something went wrong. Please try again.");
     }
   };
+  
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">

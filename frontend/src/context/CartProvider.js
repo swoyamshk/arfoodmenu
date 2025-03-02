@@ -72,7 +72,7 @@ export const CartProvider = ({ children }) => {
     };
   
     try {
-      const response = await fetch("https://localhost:8080/api/Orders", {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/Orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

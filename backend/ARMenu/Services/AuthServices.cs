@@ -22,23 +22,23 @@ namespace ARMenu.Services
             _secretKey = _configuration["JwtSettings:SecretKey"];
         }
 
-        public async Task<(string Token, string Role)> RegisterUser(string username, string email, string password, string role)
+        public async Task<(string Token, string Role, string UserId)> RegisterUser(string username, string email, string password, string role)
         {
             var existingUser = await _mongoDbService.GetUserByEmailAsync(email);
             if (existingUser != null)
-                return (null, null);
+                return (null, null, null);
 
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
-
-            // Ensure role is either "admin" or "customer"
             var userRole = string.IsNullOrEmpty(role) ? "customer" : role;
 
             var user = new User { Username = username, Email = email, PasswordHash = hashedPassword, Role = userRole };
             await _mongoDbService.AddUserAsync(user);
 
+
             var token = GenerateJwtToken(user);
-            return (token, user.Role);
+            return (token, user.Role, user.Id);
         }
+
 
 
         public async Task<(string Token, string Role, string userId)> LoginUser(string email, string password)
