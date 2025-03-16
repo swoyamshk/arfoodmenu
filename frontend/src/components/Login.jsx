@@ -82,17 +82,27 @@ const Login = ({ setToken }) => {
             Sign in
           </button>
         </form>
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">Or sign in with</p>
-          <div className="mt-4 flex justify-center space-x-4">
-            <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-100">
-              <img src="https://via.placeholder.com/24" alt="Google" className="h-6 w-6" />
-            </button>
-            <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-100">
-              <img src="https://via.placeholder.com/24" alt="Facebook" className="h-6 w-6" />
-            </button>
-          </div>
-        </div>
+  <div className="mt-6 text-center">
+  <p className="text-sm text-gray-600">Or sign in with</p>
+  <div className="mt-4 flex justify-center space-x-4">
+    <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-100">
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+        alt="Google"
+        className="h-6 w-6"
+      />
+    </button>
+    <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-100">
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png"
+        alt="Facebook"
+        className="h-6 w-6"
+      />
+    </button>
+  </div>
+</div>
+
+
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
             Don't have an account? <a href="#" className="text-blue-500 hover:text-blue-700" onClick={handleRegisterClick}>Register</a>

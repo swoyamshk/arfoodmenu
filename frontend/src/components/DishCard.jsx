@@ -30,113 +30,105 @@ const DishCard = ({ dish }) => {
   const { addToCart } = useCart();
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteId, setFavoriteId] = useState(null);
-  const userId = localStorage.getItem("userId"); // Fallback for testing
-
-  console.log("DishCard - Initial User ID:", userId);
-  console.log("DishCard - Dish Object:", dish);
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     if (!userId || !dish?.id) {
-      console.log("DishCard - Skipping useEffect: userId or dish.id missing");
       return;
     }
-
-    console.log("DishCard - useEffect - User ID:", userId);
-    console.log("DishCard - useEffect - Dish ID:", dish.id);
-
     const checkFavorite = async () => {
       try {
-        console.log("DishCard - Checking favorites for User ID:", userId);
         const favorites = await getFavoriteDishes(userId);
-        console.log("DishCard - Retrieved favorites:", favorites);
-        const favorite = favorites.find(f => f.dishId === dish.id);
-        console.log("DishCard - Found favorite:", favorite);
+        const favorite = favorites.find((f) => f.dishId === dish.id);
         setIsFavorite(!!favorite);
         setFavoriteId(favorite ? favorite.id : null);
       } catch (error) {
-        console.error("DishCard - Error checking favorite:", error.response?.data || error.message);
+        console.error("Error checking favorite:", error.response?.data || error.message);
       }
     };
-
     checkFavorite();
   }, [dish?.id, userId]);
 
   const handleToggleFavorite = async (e) => {
     e.stopPropagation();
-
     if (!userId) {
-      console.log("DishCard - No userId, redirecting to login");
       toast.error("You need to log in to save favorites.");
       navigate("/login");
       return;
     }
-
     if (!dish?.id) {
-      console.log("DishCard - Invalid dish ID");
       toast.error("Invalid dish ID.");
       return;
     }
-
-    console.log("DishCard - Toggling favorite - Payload:", { userId, dishId: dish.id });
-
     try {
       if (isFavorite) {
-        console.log("DishCard - Removing favorite with ID:", favoriteId);
         await removeFavoriteDish(favoriteId);
         setIsFavorite(false);
         setFavoriteId(null);
         toast.success(`${dish.name} removed from favorites!`);
       } else {
-        console.log("DishCard - Adding favorite with User ID:", userId, "Dish ID:", dish.id);
         const newFavorite = await addFavoriteDish(userId, dish.id);
-        console.log("DishCard - New favorite added:", newFavorite);
         setIsFavorite(true);
         setFavoriteId(newFavorite.id);
         toast.success(`${dish.name} added to favorites!`);
       }
     } catch (error) {
-      console.error("DishCard - Error updating favorites:", error.response?.data || error.message);
+      console.error("Error updating favorites:", error.response?.data || error.message);
       toast.error("Failed to update favorites.");
     }
   };
 
   const handleClick = () => {
-    console.log("DishCard - Navigating to dish details with ID:", dish.id);
     navigate(`/dish/${dish.id}`, { state: { dish } });
   };
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
-    console.log("DishCard - Adding to cart:", dish.name);
     addToCart(dish);
     toast.success(`${dish.name} added to cart!`);
   };
 
-  const handleEyeClick = () => {
-    window.location.href = `${process.env.REACT_APP_WEBXR_URL}/webxr`;
+  const handleEyeClick = (e) => {
+    e.stopPropagation();
+    if (dish.arModelFileId) {
+      navigate(`/webxr/${dish.id}`, { state: { dish } });
+    } else {
+      toast.error("No 3D model available for this dish");
+    }
   };
 
   return (
-    <div className="p-3 rounded-2xl cursor-pointer shadow-md" onClick={handleClick}>
+    <div
+      className="p-3 rounded-2xl shadow-md cursor-pointer bg-white"
+      onClick={handleClick}
+    >
       <div className="relative mb-3">
         <img
           src={getImageUrl(dish.imageFileId)}
           alt={dish.name}
           className="w-full h-40 object-cover rounded-lg"
-          onError={(e) => { e.target.src = "/placeholder.svg"; }}
+          onError={(e) => {
+            e.target.src = "/placeholder.svg";
+          }}
         />
       </div>
-      <h3 className="font-semibold">{dish.name}</h3>
+      <h3 className="font-semibold text-lg mb-1">{dish.name}</h3>
       {dish.restaurantName && (
-        <p className="text-xs text-gray-400">From: {dish.restaurantName}</p>
+        <p className="text-xs text-gray-400 mb-2">From: {dish.restaurantName}</p>
       )}
-      <p className="text-sm text-gray-500 mb-2">{dish.description}</p>
-      <div className="flex justify-between items-center">
-        <span className="font-bold">$ {dish.price.toFixed(2)}</span>
-        <div className="flex gap-2">
+      <p className="text-sm text-gray-500 mb-3 line-clamp-2">{dish.description}</p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+        <span className="font-bold text-base sm:text-lg mb-2 sm:mb-0">
+          $ {dish.price.toFixed(2)}
+        </span>
+        <div className="flex flex-wrap gap-2">
           <Button
             size="icon"
-            className={`rounded-full h-8 w-8 ${isFavorite ? "bg-red-500 hover:bg-red-600" : "bg-gray-200 hover:bg-gray-300"}`}
+            className={`rounded-full h-8 w-8 ${
+              isFavorite
+                ? "bg-red-500 hover:bg-red-600"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
             onClick={handleToggleFavorite}
           >
             <HeartIcon filled={isFavorite} />

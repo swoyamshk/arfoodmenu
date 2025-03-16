@@ -84,20 +84,23 @@ const CartPage = () => {
         <p>Your cart is empty.</p>
       ) : (
         <>
-          {cart.map((item) => (
-            <div key={item.id} className="flex items-center justify-between border-b py-2">
-              <div>
-                <h2 className="text-lg">{item.name}</h2>
-                <p className="text-gray-500">${item.price.toFixed(2)} x {item.quantity}</p>
-              </div>
-              <button
-                onClick={() => removeFromCart(item.id)}
-                className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
-              >
-                Remove
-              </button>
-            </div>
-          ))}
+        {cart.map((item) => (
+  <div key={item.id} className="flex items-center justify-between border-b py-2">
+    <div>
+      <h2 className="text-lg">{item.name || "Unknown Item"}</h2>
+      <p className="text-gray-500">
+        ${item.price ? item.price.toFixed(2) : "0.00"} x {item.quantity || 1}
+      </p>
+    </div>
+    <button
+      onClick={() => removeFromCart(item.id)}
+      className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
+    >
+      Remove
+    </button>
+  </div>
+))}
+
 
           <div className="mt-4 flex gap-4">
             <button

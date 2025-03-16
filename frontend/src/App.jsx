@@ -19,6 +19,7 @@ import FailurePage from "./components/Failure";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import ARjsViewer from "./components/CameraAccess";
+import WebXRARViewer from "./components/CameraAccess";
 
 function App() {
 
@@ -47,7 +48,7 @@ function App() {
         <Route path="/favorites" element={<FavoritesPage />} />
         <Route path="/success" element={<SuccessPage />} />
         <Route path="/failure" element={<FailurePage />} />
-        <Route path="/webxr" element={<ARjsViewer />} />
+        <Route path="/webxr/:id" element={<WebXRARViewer />} />
       </Routes>
       <BottomNavBar/>
       </Router> 

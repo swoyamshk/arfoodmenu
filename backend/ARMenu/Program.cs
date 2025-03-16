@@ -41,7 +41,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("https://localhost:3000", "https://192.168.1.15:3000", "https://192.168.1.6:3000") 
+        policy.WithOrigins("https://localhost:3000", "https://localhost:3001", "https://192.168.1.15:3000", "https://192.168.1.6:3000", "https://192.168.1.189:3000", "https://192.168.100.113:3000", "https://255.255.255.0:3000") 
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials(); // Allow credentials for SignalR
@@ -73,3 +73,4 @@ app.MapHub<NotificationHub>("/notificationHub");
 app.MapControllers();
 
 app.Run("https://0.0.0.0:8080");
+    
