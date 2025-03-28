@@ -10,6 +10,8 @@ namespace ARMenu.Services
     {
         private readonly IMongoCollection<User> _users;
         private readonly IMongoCollection<Order> _orders; // New collection for orders
+        private readonly IMongoCollection<Dish> _dishes;  // Add the Dishes collection
+        private readonly IMongoCollection<Review> _reviews; // Add the Reviews collection
 
         public MongoDbService(IOptions<MongoDbSettings> settings)
         {
@@ -17,8 +19,14 @@ namespace ARMenu.Services
             var database = client.GetDatabase(settings.Value.DatabaseName);
             _users = database.GetCollection<User>(settings.Value.UserCollection);
             _orders = database.GetCollection<Order>("Orders"); // Initialize orders collection
+            _dishes = database.GetCollection<Dish>("Dishes");  // Initialize Dishes collection
+            _reviews = database.GetCollection<Review>("Reviews"); // Initialize Reviews collection
         }
 
+        public IMongoCollection<Dish> GetDishCollection() => _dishes;
+
+        // Review-related methods
+        public IMongoCollection<Review> GetReviewCollection() => _reviews;
         // User-related methods
         public async Task<User> GetUserByEmailAsync(string email) =>
             await _users.Find(u => u.Email == email).FirstOrDefaultAsync();
@@ -78,7 +86,19 @@ namespace ARMenu.Services
 
         public async Task<bool> VerifyEmailConfirmationTokenAsync(string userId, string token)
         {
-            var user = await _users.Find(u => u.Id == userId && u.ConfirmationToken == token).FirstOrDefaultAsync();
+            // Validate input parameters
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+            {
+                return false;
+            }
+
+            var user = await _users.Find(u =>
+                u.Id == userId &&
+                u.ConfirmationToken == token &&
+                u.IsEmailConfirmed == false)
+                .FirstOrDefaultAsync();
+
+            // Only return true if user is found and email is not already confirmed
             return user != null;
         }
 

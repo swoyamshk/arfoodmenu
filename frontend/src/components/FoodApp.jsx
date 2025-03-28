@@ -33,7 +33,7 @@ const SlidersIcon = () => (
   </svg>
 );
 
-// Login Popup Component
+// Login Popup Component (unchanged)
 const LoginPopup = ({ isOpen, onClose, onLogin }) => {
   if (!isOpen) return null;
 
@@ -71,10 +71,10 @@ export default function FoodApp() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
-  const [showLoginPopup, setShowLoginPopup] = useState(false); // Control popup visibility
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
-  // Check if user is logged in on mount
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
@@ -104,14 +104,17 @@ export default function FoodApp() {
     if (!isLoggedIn) {
       setShowLoginPopup(true);
     } else {
-      // Add your favorites logic here
       console.log(`Added ${dish.name} to favorites`);
     }
   };
 
   const handleLoginRedirect = () => {
     setShowLoginPopup(false);
-    navigate("/login"); // Assuming you have a login route
+    navigate("/login");
+  };
+
+  const handleCategoryClick = (categoryName) => {
+    setSelectedCategory(categoryName === selectedCategory ? "" : categoryName);
   };
 
   const categories = [
@@ -121,23 +124,27 @@ export default function FoodApp() {
     { icon: <PizzaIcon />, name: "Sushi", color: "bg-purple-100 text-purple-500" },
   ];
 
-  const filteredDishes = dishes.filter((dish) =>
-    dish.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredDishes = dishes.filter((dish) => {
+    const matchesSearch = dish.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory 
+      ? dish.name.toLowerCase().includes(selectedCategory.toLowerCase())
+      : true;
+    return matchesSearch && matchesCategory;
+  });
 
   if (loading) return <p className="text-center text-gray-500">Loading...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="w-full min-h-screen flex flex-col bg-white">
+    <div className="w-full min-h-screen flex flex-col bg-white mt-3">
       <div className="flex-1 max-w-4xl mx-auto w-full pb-20">
         <header className="flex flex-wrap justify-between items-center mb-6 px-4 md:px-6">
           <div>
             <h1 className="text-2xl font-bold">Hello,</h1>
             <p className="text-gray-500">What you want to eat today?</p>
           </div>
-          <div className="w-10 h-10 rounded-full bg-yellow-400 overflow-hidden">
-            <img src="/logo192.png" alt="Profile" className="w-full h-full object-cover" />
+          <div className="w-10 h-10 rounded-full bg-yellow-400 overflow-hidden" > 
+            <img src="/profile.jpg" alt="Profile" className="w-full h-full object-cover" onClick={()=>navigate("/profile")} />
           </div>
         </header>
 
@@ -182,7 +189,10 @@ export default function FoodApp() {
           {categories.map((category, index) => (
             <button
               key={index}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full ${category.color} whitespace-nowrap`}
+              onClick={() => handleCategoryClick(category.name)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full ${category.color} whitespace-nowrap ${
+                selectedCategory === category.name ? 'ring-2 ring-offset-2 ring-gray-400' : ''
+              }`}
             >
               {category.icon}
               <span>{category.name}</span>
@@ -196,7 +206,7 @@ export default function FoodApp() {
               key={dish.id}
               dish={dish}
               onClick={handlePizzaClick}
-              onAddToFavorites={() => handleAddToFavorites(dish)} // Pass favorites handler
+              onAddToFavorites={() => handleAddToFavorites(dish)}
             />
           ))}
         </div>

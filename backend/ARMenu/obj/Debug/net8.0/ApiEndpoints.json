@@ -606,6 +606,63 @@
     ]
   },
   {
+    "ContainingType": "ARMenu.Controllers.ReviewsController",
+    "Method": "GetReviews",
+    "RelativePath": "api/Reviews/{dishId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dishId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[ARMenu.Models.Review, ARMenu, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "ARMenu.Controllers.ReviewsController",
+    "Method": "AddReview",
+    "RelativePath": "api/Reviews/{dishId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dishId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "reviewDto",
+        "Type": "ARMenu.Models.ReviewDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "ARMenu.Models.Review",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "ARMenu.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",

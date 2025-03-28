@@ -1,4 +1,4 @@
-﻿//using MongoDB.Driver;
+﻿//﻿using MongoDB.Driver;
 //using System.Collections.Generic;
 //using System.Threading.Tasks;
 //using ARMenu.Models;
@@ -24,8 +24,9 @@
 
 //    public async Task MarkAsRead(string notificationId)
 //    {
-//        var filter = Builders<Notification>.Filter.Eq(n => n.Id, notificationId);
-//        var update = Builders<Notification>.Update.Set(n => n.IsRead, true);
+//        var filter = Builders<Notification>.Filter.Eq(nameof(Notification.Id), notificationId);
+//        var update = Builders<Notification>.Update.Set(nameof(Notification.IsRead), true);
 //        await _notifications.UpdateOneAsync(filter, update);
 //    }
+
 //}

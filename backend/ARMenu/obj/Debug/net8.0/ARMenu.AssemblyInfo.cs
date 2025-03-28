@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ARMenu")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9646b2bbd159dacee33013e62d6f0e63382c2da3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8952c99c8208c6259c672ccaebe34d242e1e15c3")]
 [assembly: System.Reflection.AssemblyProductAttribute("ARMenu")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ARMenu")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

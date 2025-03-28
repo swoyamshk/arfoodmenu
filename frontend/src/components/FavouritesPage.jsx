@@ -3,6 +3,7 @@ import { getFavoriteDishes } from "../services/favouritesServices";
 import { getDishById } from "../services/dishServices";
 import DishCard from "../components/DishCard";
 import { useNavigate } from "react-router-dom"; // Added for navigation
+import {Bell} from "lucide-react";
 
 export default function FavoritesPage() {
   const [favorites, setFavorites] = useState([]);
@@ -50,16 +51,17 @@ export default function FavoritesPage() {
     return (
       <div className="w-full min-h-screen flex flex-col bg-white">
         <div className="flex-1 max-w-4xl mx-auto w-full p-4 flex items-center justify-center pb-20">
-          <div className="text-center">
+        <div className="text-center bg-white p-8 rounded-xl shadow-lg">
+            <Bell className="mx-auto mb-4 text-blue-500" size={64} />
             <h1 className="text-2xl font-bold mb-4 text-gray-800">
               Login Required
             </h1>
             <p className="text-gray-600 mb-6">
-              You need to be logged in to view your favorite dishes.
+              Please log in to view your notifications.
             </p>
             <button
               onClick={() => navigate("/login")}
-              className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-200"
+              className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-200 shadow-md"
             >
               Go to Login
             </button>
@@ -84,7 +86,7 @@ export default function FavoritesPage() {
 
   return (
     <div className="w-full min-h-screen flex flex-col bg-white">
-      <div className="flex-1 max-w-4xl mx-auto w-full p-4 pb-20">
+      <div className="flex-1 max-w-4xl mx-auto w-full p-2 pb-20">
         <h1 className="text-2xl font-bold mb-6 px-4 md:px-6">Your Favorite Dishes</h1>
         {favorites.length === 0 ? (
           <p className="text-center text-gray-500">You haven’t added any favorites yet.</p>

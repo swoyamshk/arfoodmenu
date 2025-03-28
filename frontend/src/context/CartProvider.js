@@ -55,7 +55,7 @@ export const CartProvider = ({ children }) => {
   const createOrder = async (userId) => {
     if (!userId) {
       console.error("User ID is missing.");
-      return;
+      return null;
     }
   
     const orderData = {
@@ -67,7 +67,6 @@ export const CartProvider = ({ children }) => {
         dishName: item.name,
         price: item.price,
         quantity: item.quantity,
-        // Do NOT include 'Id' or 'OrderId' here, let the backend handle it
       })),
     };
   
@@ -86,10 +85,13 @@ export const CartProvider = ({ children }) => {
         throw new Error(`Failed to place order: ${response.statusText}`);
       }
   
-      // console.log("Order placed successfully!");
+      const orderResult = await response.json(); // Parse the response to get order details
+      
       clearCart();
+      return orderResult; // Return the order details
     } catch (error) {
       console.error("Error placing order:", error.message);
+      return null;
     }
   };
   

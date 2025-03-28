@@ -4,23 +4,20 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using DnsClient.Internal;
 
 [ApiController]
 [Route("api/notifications")]
 public class NotificationController : ControllerBase
 {
     private readonly IMongoCollection<Notification> _notificationCollection;
-    private readonly ILogger<Notification> _logger;
+    private readonly ILogger<NotificationController> _logger;
 
-
-    public NotificationController(IMongoClient mongoClient, ILogger<Notification> logger)
+    public NotificationController(IMongoClient mongoClient, ILogger<NotificationController> logger)
     {
-        var database = mongoClient.GetDatabase("ARFoodMenu"); // Ensure this method exists in MongoDbService
+        var database = mongoClient.GetDatabase("ARFoodMenu");
         _notificationCollection = database.GetCollection<Notification>("Notifications");
         _logger = logger;
     }
-
 
     [HttpPost("save")]
     public async Task<IActionResult> SaveNotification([FromBody] Notification model)
@@ -44,9 +41,9 @@ public class NotificationController : ControllerBase
 
         // Save the notification to the database
         await _notificationCollection.InsertOneAsync(notification);
-
         return Ok(new { success = true });
     }
+
     [HttpGet("{userId}")]
     public async Task<IActionResult> GetUserNotifications(string userId)
     {
@@ -57,9 +54,9 @@ public class NotificationController : ControllerBase
                 .SortByDescending(n => n.Timestamp)
                 .ToListAsync();
 
-            if (notifications == null)
+            if (notifications == null || notifications.Count == 0)
             {
-                return NotFound("No notifications found.");
+                return Ok(new List<Notification>()); // Return empty list instead of NotFound
             }
 
             return Ok(notifications);
@@ -70,6 +67,4 @@ public class NotificationController : ControllerBase
             return StatusCode(500, "Internal server error");
         }
     }
-
-
 }

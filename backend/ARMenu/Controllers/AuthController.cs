@@ -161,24 +161,58 @@ namespace ARMenu.Controllers
         {
             try
             {
-                var isValid = await _mongoDbService.VerifyEmailConfirmationTokenAsync(userId, token);
-                if (!isValid)
+                // Decode the token
+                byte[] decodedTokenBytes;
+                try
                 {
-                    return BadRequest("Invalid or expired confirmation link.");
-                }
+                    decodedTokenBytes = WebEncoders.Base64UrlDecode(token);
+                    var confirmationToken = Encoding.UTF8.GetString(decodedTokenBytes);
 
-                // Activate user account by setting IsEmailConfirmed to true
-                var isActivated = await _mongoDbService.ActivateUserAccountAsync(userId);
-                if (!isActivated)
+                    // Validate input parameters
+                    if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(confirmationToken))
+                    {
+                        return BadRequest(new { message = "Invalid confirmation parameters." });
+                    }
+
+                    // Verify the token against the stored token for this user
+                    var isValid = await _mongoDbService.VerifyEmailConfirmationTokenAsync(userId, confirmationToken);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(new
+                        {
+                            message = "Invalid or expired confirmation link.",
+                            details = "The confirmation link may have already been used or has expired."
+                        });
+                    }
+
+                    // Activate user account
+                    var isActivated = await _mongoDbService.ActivateUserAccountAsync(userId);
+                    if (!isActivated)
+                    {
+                        return BadRequest(new { message = "Account activation failed." });
+                    }
+
+                    return Ok(new { message = "Email confirmed successfully! You can now log in." });
+                }
+                catch (FormatException)
                 {
-                    return BadRequest("Account activation failed.");
+                    return BadRequest(new
+                    {
+                        message = "Invalid token format.",
+                        details = "The confirmation token could not be decoded properly."
+                    });
                 }
-
-                return Ok(new { message = "Email confirmed successfully! You can now log in." });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                // Log the exception
+                Console.WriteLine($"Email confirmation error: {ex.Message}");
+                return StatusCode(500, new
+                {
+                    message = "An unexpected error occurred during email confirmation.",
+                    details = ex.Message
+                });
             }
         }
 

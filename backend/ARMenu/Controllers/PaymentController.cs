@@ -6,7 +6,7 @@ using Stripe.Checkout;
 [Route("api/[controller]")]
 public class PaymentsController : ControllerBase
 {
-    private readonly string _stripeSecretKey = "sk_test_51Qxm8xRxY9y7noBqwnqI1hesER2xrSs9Jx8MMEYRdsPqtUtzWlpQiIfYMP0kon6xmIF47O8W7XA2JKhUHawnwPzl00fuCcUQ72"; // Replace with your actual secret key
+    private readonly string _stripeSecretKey = "sk_test_51PnC86P5gKndYWM0ELEYsZgKCHbAGJkcakXd6r6aHtVcPVAOFSixKdnfMDTi1bozZYLRF4ptp5NlfesnfZ7i4uIX00UAXvV5Xy"; // Replace with your actual secret key
 
     public PaymentsController()
     {

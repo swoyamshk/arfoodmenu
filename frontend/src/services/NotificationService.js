@@ -1,62 +1,42 @@
 class NotificationService {
-    constructor(userId) {
-      this.socket = new WebSocket(" wss://echo.websocket.org"); // Your WebSocket server
-      this.userId = userId;
+  async saveNotification(userId, message) {
+    console.log("Saving Notification - userId:", userId);
+    console.log("Saving Notification - message:", message);
+
+    if (!userId || !message) {
+      console.error("Missing userId or message");
+      throw new Error("UserId and message are required");
     }
-  
-    connect(setNotifications) {
-      this.socket.onopen = () => console.log("Connected to WebSocket");
-  
-      this.socket.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data); // Parse incoming JSON
-      
-          console.log("Received WebSocket message:", data); // Debugging
-      
-          if (this.userId && data.message) {
-            this.saveNotification(this.userId, data.message); // Pass only the message string
-          }
-        } catch (error) {
-          console.error("Error parsing WebSocket message:", error);
-        }
-      };
-      
-      
-      
-  
-      this.socket.onerror = (error) => console.error("WebSocket Error:", error);
-    }
-  
-    async saveNotification(userId, message) {
-      console.log("Saving notification with:", userId, message); // Debugging
-    
-      if (!userId || !message) {
-        console.error("Missing userId or message");
-        return;
+
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/notifications/save`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          userId, 
+          message 
+        })
+      });
+
+      console.log("Notification Save Response:", response);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error saving notification:", errorData);
+        throw new Error(errorData.message || "Failed to save notification");
       }
-    
-      try {
-        const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/notifications/save`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userId, message }) // Ensure message is a plain string
-        });
-    
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error("Error saving notification:", errorData);
-        } else {
-          console.log("Notification saved successfully!");
-        }
-      } catch (error) {
-        console.error("Fetch error:", error);
-      }
+      
+      const result = await response.json();
+      console.log("Notification Save Result:", result);
+      
+      return result;
+    } catch (error) {
+      console.error("Fetch error:", error);
+      throw error;
     }
-    
-      
-      
   }
-  
-  export default NotificationService;
+}
+
+export default NotificationService;

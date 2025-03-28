@@ -12,27 +12,52 @@ const Login = ({ setToken }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await loginUser({ email, password });
+      const response = await loginUser({ email, password });
   
-      if (data?.token && data?.role) {
+      // Check if response has data and token
+      if (response.data?.token && response.data?.role) {
         // Store token and role in localStorage
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("role", data.role);
-        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("role", response.data.role);
+        localStorage.setItem("userId", response.data.userId);
   
-        setToken(data.token);
-  
+        setToken(response.data.token);
   
         // Navigate based on the role
-        navigate(data.role === "admin" ? "/create-dish" : "/profile");
+        navigate(response.data.role === "admin" ? "/create-dish" : "/profile");
   
         toast.success("Login successful!");
       } else {
+        // Handle cases where response might not have expected data
         toast.error("Invalid response from server.");
       }
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Login failed. Please try again.");
+      
+      // Check for specific error responses
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        switch (error.response.status) {
+          case 401:
+            toast.error("Invalid email or password. Please try again.");
+            break;
+          case 404:
+            toast.error("User not found. Please check your email.");
+            break;
+          case 403:
+            toast.error("Account locked. Please contact support.");
+            break;
+          default:
+            toast.error(error.response.data.message || "Login failed. Please try again.");
+        }
+      } else if (error.request) {
+        // The request was made but no response was received
+        toast.error("No response from server. Please check your internet connection.");
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        toast.error("An unexpected error occurred. Please try again.");
+      }
     }
   };
   
@@ -82,26 +107,25 @@ const Login = ({ setToken }) => {
             Sign in
           </button>
         </form>
-  <div className="mt-6 text-center">
-  <p className="text-sm text-gray-600">Or sign in with</p>
-  <div className="mt-4 flex justify-center space-x-4">
-    <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-100">
-      <img
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
-        alt="Google"
-        className="h-6 w-6"
-      />
-    </button>
-    <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-100">
-      <img
-        src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png"
-        alt="Facebook"
-        className="h-6 w-6"
-      />
-    </button>
-  </div>
-</div>
-
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600">Or sign in with</p>
+          <div className="mt-4 flex justify-center space-x-4">
+            <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-100">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+                alt="Google"
+                className="h-6 w-6"
+              />
+            </button>
+            <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-100">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png"
+                alt="Facebook"
+                className="h-6 w-6"
+              />
+            </button>
+          </div>
+        </div>
 
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">

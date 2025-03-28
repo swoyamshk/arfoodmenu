@@ -3,7 +3,7 @@ using System;
 
 public class StripeService
 {
-    private readonly string _secretKey = "sk_test_51Qxm8xRxY9y7noBqwnqI1hesER2xrSs9Jx8MMEYRdsPqtUtzWlpQiIfYMP0kon6xmIF47O8W7XA2JKhUHawnwPzl00fuCcUQ72"; // Use your Stripe secret key
+    private readonly string _secretKey = "sk_test_51PnC86P5gKndYWM0ELEYsZgKCHbAGJkcakXd6r6aHtVcPVAOFSixKdnfMDTi1bozZYLRF4ptp5NlfesnfZ7i4uIX00UAXvV5Xy"; // Use your Stripe secret key
 
     public StripeService()
     {

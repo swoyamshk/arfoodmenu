@@ -47,10 +47,12 @@ namespace ARMenu.Services
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
                 return (null, null, null);
 
+            // Add email confirmation check
+            if (!user.IsEmailConfirmed)
+                return (null, null, null);
+
             var token = GenerateJwtToken(user);
-            //var userId = await _mongoDbService.GetUserByIdAsync(userId);
             return (token, user.Role, user.Id);
-           
         }
 
 

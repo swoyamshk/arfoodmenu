@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const API_URL = "https://localhost:8080/api/auth";
+const API_URL = `${process.env.REACT_APP_BASE_URL}/api/auth`
 
 const ProfilePage = () => {
   const [faceIdEnabled, setFaceIdEnabled] = useState(false);
@@ -11,11 +11,14 @@ const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(localStorage.getItem("role") === "admin");
 
   useEffect(() => {
     const checkAuth = () => {
       const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
       setIsLoggedIn(!!token);
+      setIsAdmin(role === "admin");
     };
 
     checkAuth();
@@ -59,11 +62,11 @@ const ProfilePage = () => {
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="max-w-md mx-auto bg-white p-5 rounded-lg shadow-lg pt-10">
+    <div className="max-w-md mx-auto bg-white p-5 rounded-lg shadow-lg pt-10 pb-20"> {/* Added pb-20 for bottom padding */}
       {/* Profile Header */}
       <div className="bg-orange-500 hover:bg-orange-600 p-4 rounded-lg text-white flex items-center">
         <img
-          src="/profile-pic.jpg"
+          src="/profile.jpg"
           alt="Profile"
           className="w-14 h-14 rounded-full border-2 border-white"
         />
@@ -81,7 +84,7 @@ const ProfilePage = () => {
           <ProfileOption 
             title="My Account" 
             description="Make changes to your account" 
-            onClick={() => navigate("/update-profile")} // Navigate to update profile page
+            onClick={() => navigate("/update-profile")}
           />
           <ProfileOption title="Change Password" description="Update your password for security" />
           <div className="flex justify-between items-center">
@@ -93,6 +96,21 @@ const ProfilePage = () => {
               className="toggle-checkbox"
             />
           </div>
+          {isAdmin && (
+            <>
+              <ProfileOption
+                title="Create Dish"
+                description="Add a new dish to the menu"
+                onClick={() => navigate("/create-dish")}
+              />
+              <ProfileOption
+                title="Create Restaurant"
+                description="Add a new restaurant to the application"
+                onClick={() => navigate("/create-restaurant")}
+              />
+            </>
+          )}
+
           <ProfileOption
             title="Log Out"
             description="Sign out of your account"
@@ -109,7 +127,7 @@ const ProfilePage = () => {
       </div>
 
       {/* More Section */}
-      <div className="mt-5 bg-gray-100 p-4 rounded-lg">
+      <div className="mt-5 bg-gray-100 p-4 rounded-lg mb-5"> {/* Added mb-5 for bottom margin */}
         <h3 className="text-gray-700 font-semibold mb-3">More</h3>
         <ProfileOption title="Help & Support" description="Get help and contact support" />
         <ProfileOption title="About App" description="Learn more about this app" />
