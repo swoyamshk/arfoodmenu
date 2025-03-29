@@ -1,26 +1,24 @@
 ﻿using Stripe;
-using System;
 
 public class StripeService
 {
-    private readonly string _secretKey = "sk_test_51PnC86P5gKndYWM0ELEYsZgKCHbAGJkcakXd6r6aHtVcPVAOFSixKdnfMDTi1bozZYLRF4ptp5NlfesnfZ7i4uIX00UAXvV5Xy"; // Use your Stripe secret key
+    private readonly PaymentIntentService _paymentIntentService;
 
-    public StripeService()
+    // Constructor now accepts PaymentIntentService as a dependency
+    public StripeService(PaymentIntentService paymentIntentService)
     {
-        StripeConfiguration.ApiKey = _secretKey;
+        _paymentIntentService = paymentIntentService;
+        StripeConfiguration.ApiKey = "sk_test_51PnC86P5gKndYWM0ELEYsZgKCHbAGJkcakXd6r6aHtVcPVAOFSixKdnfMDTi1bozZYLRF4ptp5NlfesnfZ7i4uIX00UAXvV5Xy";
     }
 
     public PaymentIntent CreatePaymentIntent(long amount)
     {
         var options = new PaymentIntentCreateOptions
         {
-            Amount = amount * 100, // Amount should be in cents
+            Amount = amount * 100, // Convert to cents
             Currency = "usd",
         };
 
-        var service = new PaymentIntentService();
-        PaymentIntent paymentIntent = service.Create(options);
-
-        return paymentIntent;
+        return _paymentIntentService.Create(options);
     }
 }

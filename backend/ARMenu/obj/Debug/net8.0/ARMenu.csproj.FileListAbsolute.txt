@@ -151,7 +151,6 @@ C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\obj\Debug\net8.0\static
 C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.ARMenu.props
 C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.ARMenu.props
 C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\obj\Debug\net8.0\staticwebassets.pack.json
-C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\obj\Debug\net8.0\ARMenu.csproj.Up2Date
 C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\obj\Debug\net8.0\ARMenu.dll
 C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\obj\Debug\net8.0\refint\ARMenu.dll
@@ -163,3 +162,4 @@ C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\bin\Debug\net8.0\Stripe
 C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\bin\Debug\net8.0\System.Configuration.ConfigurationManager.dll
 C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\bin\Debug\net8.0\payment-gateway-nepal.dll
+C:\Users\Swoyam Shakya\Desktop\arfoodmenu\backend\ARMenu\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

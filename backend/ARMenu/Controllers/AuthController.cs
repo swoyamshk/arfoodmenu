@@ -16,7 +16,7 @@ namespace ARMenu.Controllers
     {
         private readonly AuthService _authService;
         private readonly MongoDbService _mongoDbService;
-        private readonly IEmailService _emailService;
+        private readonly EmailService _emailService;
 
         public AuthController(AuthService authService, MongoDbService mongoDbService, EmailService emailService)
         {

@@ -58,6 +58,18 @@
     ]
   },
   "devDependencies": {
-    "tailwindcss": "^3.4.17"
+    "@babel/preset-env": "^7.26.9",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
+    "babel-jest": "^29.7.0",
+    "jest": "^27.5.1",
+    "tailwindcss": "^3.4.17",
+    "vitest": "^3.0.9"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
   }
 }

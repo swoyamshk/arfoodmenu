@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ARMenu.Services
 {
-    public class EmailService : IEmailService
+    public class EmailService 
     {
         private readonly string _smtpHost = "smtp.gmail.com";  // Update with your SMTP host
         private readonly int _smtpPort = 587;  // You may need to adjust based on your provider (e.g., 465 or 25)
